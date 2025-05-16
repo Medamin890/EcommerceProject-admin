@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
-import List from "./pages/List";
 import Topbar from "./components/Topbar";
 import Dashboard from "./pages/dashbord";
 import { ToastContainer } from "react-toastify"; // Import toast
@@ -9,8 +8,8 @@ import Orders from "./pages/Orders";
 import Login from "./pages/Login";
 import { useEffect, useState } from "react";
 import AddProduct from "./pages/Add";
+import List from "./pages/ListProduct";
 import HomeBunners from "./pages/HomeBunners";
-import SalesOffBunner from "./pages/SalesOffBunner";
 import ManageAdmins from "./pages/ManageAdmins";
 import ManageUsers from "./pages/ManageUsers";
 import WebsiteInfoSetting from "./pages/WebsiteInfoSetting";
@@ -73,11 +72,11 @@ export default function App() {
                <Routes>
                  <Route path="/" element={<Dashboard  setToken={setToken}/>} />
                  <Route path="/ADDproduct" element={<AddProduct setToken={setToken} />} />
-                 <Route path="/listProducts" element={<List  token={token} setToken={setToken} />} />
-                 <Route path="/Orders" element={<Orders setToken={setToken} />} />
+                 <Route path="/listProducts/:id?" element={<List  token={token} setToken={setToken} />} />
+                 <Route path="/Orders/:id?" element={<Orders setToken={setToken} />} />
                  <Route path="/HomeBunners" element={<HomeBunners setToken={setToken} />} />
-                 <Route path="/ManageAdmins" element={<ManageAdmins setToken={setToken} />} />
-                 <Route path="/ManageUsers" element={<ManageUsers setToken={setToken} />} />
+                 <Route path="/ManageAdmins/:id?" element={<ManageAdmins setToken={setToken} />} />
+                 <Route path="/ManageUsers/:id?" element={<ManageUsers setToken={setToken} />} />
                  <Route path="/WebsiteInfoSetting" element={<WebsiteInfoSetting setToken={setToken} collapsed={collapsed} />} />
                </Routes>
              </div>

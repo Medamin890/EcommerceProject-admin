@@ -6,6 +6,7 @@ import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import popularIcons from "../assets/popularity.png"
 import UpdateProduct from "../components/LIST/UpdateProduct";
+import { useParams } from 'react-router-dom';
 
 const ListProducts = ({token,setToken}) => {
   const [products, setProducts] = useState([])
@@ -26,6 +27,7 @@ const ListProducts = ({token,setToken}) => {
     details: {
       DescriptionSection: [], // Reset description items
     },  });
+  const { id } = useParams(); // assuming your route is /listProducts/:id
 
   // State for Popular Filter
   const [isPopular, setIsPopular] = useState(false);
@@ -89,6 +91,21 @@ const ListProducts = ({token,setToken}) => {
     }
   };
   
+  const filteredProducts = products
+  .filter((product) => {
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.subCategory.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.subSubCategory.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesPopularity = !isPopular || product.popular;
+
+    const matchesId = !id || product._id === id; // only filter by ID if it exists in URL
+
+    return matchesSearch && matchesPopularity && matchesId;
+  });
+
 
   return (
     <div className="px-12 pt-12">
@@ -138,16 +155,7 @@ const ListProducts = ({token,setToken}) => {
       </thead>
       <tbody >
       {products.length > 0 ? (
-      products
-        .filter(
-          (product) =>
-            ((product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              product.subSubCategory.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              product.subCategory.toLowerCase().includes(searchTerm.toLowerCase())) ) &&   
-              (!isPopular || product.popular) // Filter by Popular if isPopular is true
-          )
-          .map((product) => (
+      filteredProducts.map((product) => (
                 <tr key={product._id} className="border-b border-gray-200 text-center hover:bg-slate-100">
                   <td className="px-6 py-4 text-center">
                       {product.images && Array.isArray(product.images) && product.images[0] ? (
