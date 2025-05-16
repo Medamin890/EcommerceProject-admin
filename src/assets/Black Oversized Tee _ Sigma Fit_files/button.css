@@ -1,0 +1,407 @@
+:root {
+  --peppy-notifyme-button-background-color: rgb(32, 34, 35);
+  --peppy-notifyme-button-text-color: rgb(255, 255, 255);
+  --peppy-popup-form-notifyme-button-background-color: rgb(32, 34, 35);
+  --peppy-popup-form-notifyme-button-text-color: rgb(255, 255, 255);
+  --peppy-popup-form-backdrop-color: rgba(0, 0, 0, 0.5);
+}
+
+.peppy-notify-me-button-container {
+  margin: 0px !important;
+  padding: 0px !important;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  display: none !important;
+  box-sizing: border-box !important;
+}
+
+.peppy-notify-me-button-container-float-right {
+  transform: rotate(270deg) !important;
+  transform-origin: 100% 100% !important;
+  position: fixed !important;
+  z-index: 9999 !important;
+  top: 140px !important;
+  right: 0 !important;
+  width: 250px !important;
+}
+
+.peppy-notify-me-button,
+.peppy-notify-me-button-float-right {
+  margin: 0px !important;
+  padding: 0px !important;
+  text-align: center !important;
+  background-color: var(--peppy-notifyme-button-background-color) !important;
+  color: var(--peppy-notifyme-button-text-color) !important;
+  opacity: 1 !important;
+  border: none !important;
+  cursor: pointer !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  height: 50px !important;
+  line-height: 1.2 !important;
+  width: 100% !important;
+  font-family: inherit !important;
+  font-size: 16px;
+  box-sizing: border-box !important;
+}
+
+.peppy-popup-form-notifyme-button.peppy-form-btn-disabled {
+  opacity: 0.4 !important;
+}
+
+.peppy-notify-me-button-container:hover,
+.peppy-notify-me-button:hover,
+.peppy-popup-form-close-button:hover,
+.peppy-popup-form-notifyme-button:hover {
+  opacity: 0.8 !important;
+}
+
+#peppy-form-container::backdrop {
+  background: var(--peppy-popup-form-backdrop-color);
+}
+
+#peppy-form-container {
+  color: rgb(51, 51, 51) !important;
+  height: fit-content !important;
+  border-radius: 5px !important;
+  margin: auto !important;
+  margin-top: 170px !important;
+  max-width: 420px !important;
+  width: 420px !important;
+  min-width: 420px !important;
+  padding: 0px !important;
+  border: 0 !important;
+  line-height: normal !important;
+  box-shadow: 0 0 1em rgb(0 0 0 / 0.3) !important;
+  display: none !important;
+  box-sizing: border-box !important;
+}
+
+@media only screen and (max-width: 430px) {
+  #peppy-form-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+}
+
+.peppy-popup-form {
+  margin: 0px !important;
+  width: 100% !important;
+  padding: 17px 20px 20px 20px !important;
+  background-color: #ffffff !important;
+  resize: none;
+  box-sizing: border-box !important;
+}
+
+#peppy-form-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  font-family: inherit !important;
+  font-weight: bold !important;
+  line-height: normal !important;
+  font-size: 24px !important;
+  padding: 0px !important;
+  margin: 0px !important;
+  box-sizing: border-box !important;
+}
+
+.peppy-popup-form-close-button {
+  font-size: 24px !important;
+  position: relative !important;
+  line-height: normal !important;
+  height: fit-content !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0px 0px 0px 0px !important;
+  padding: 0px !important;
+  cursor: pointer !important;
+  color: #aaafb4 !important;
+  font-family: sans-serif !important;
+  font-weight: bold !important;
+  box-sizing: border-box !important;
+}
+
+.peppy-headline-div {
+  margin: 0px !important;
+  padding: 0px !important;
+  margin-top: 2px !important;
+  box-sizing: border-box !important;
+}
+#peppy-popup-form-headline {
+  margin: 0px !important;
+  padding: 0px !important;
+  line-height: normal !important;
+}
+
+.peppy-popup-form-headline {
+  font-size: 16px !important;
+  margin: 0px !important;
+  padding: 0px !important;
+  font-family: inherit !important;
+  box-sizing: border-box !important;
+}
+
+.peppy-headline-margin {
+  margin: 0px !important;
+  padding: 0px !important;
+  width: 100% !important;
+  border: 1px solid #ddd9d9 !important;
+  margin-top: 5px !important;
+  margin-bottom: 0px !important;
+  box-sizing: border-box !important;
+  height: 2px !important;
+}
+
+#peppy-popup-form-product-variant-wrapper {
+  margin: 0px !important;
+  padding: 0px !important;
+  line-height: normal !important;
+  margin-top: 15px !important;
+}
+
+#peppy-form-product-name {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+
+.peppy-popup-form-selected-product {
+  margin: 0px !important;
+  padding: 0px !important;
+  font-family: inherit !important;
+  font-size: 18px !important;
+  width: 100% !important;
+  line-height: normal !important;
+
+  box-sizing: border-box !important;
+}
+
+.oos-variants-div {
+  margin: 0px !important;
+  padding: 0px !important;
+  width: 100% !important;
+  margin-top: 8px !important;
+  box-sizing: border-box !important;
+}
+
+.oos-variants {
+  margin: 0px !important;
+  padding: 0px !important;
+  line-height: normal !important;
+  font-family: inherit !important;
+  font-size: 16px !important;
+  height: 46px !important;
+  width: 100% !important;
+  padding: 10px !important;
+  background-color: #ffffff !important;
+  color: rgb(51, 51, 51) !important;
+  border: 1px solid rgb(118, 118, 118) !important;
+  border-radius: 5px !important;
+  box-sizing: border-box !important;
+}
+
+#peppy-popup-form-channels-input-wrapper {
+  margin: 0px !important;
+  padding: 0px !important;
+  line-height: normal !important;
+  margin-top: 20px !important;
+}
+
+.peppy-popup-form-bis-channels-div {
+  display: flex !important;
+  padding: 0px !important;
+  align-items: center !important;
+  line-height: normal !important;
+  font-size: 18px !important;
+  margin: 0px 0px 8px 0px !important;
+}
+
+.peppy-popup-form-bis-default-channel-container {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+
+.peppy-popup-form-bis-second-channel-container {
+  margin: 0px !important;
+  padding: 0px !important;
+  margin-left: 12px !important;
+}
+
+.peppy-popup-form-default-channel-label,
+.peppy-popup-form-second-channel-label {
+  margin: 0px !important;
+  font-size: 18px !important;
+  line-height: normal !important;
+  padding: 0px !important;
+  display: inline !important;
+  cursor: pointer !important;
+}
+
+.peppy-popup-form-bis-default-channel,
+.peppy-popup-form-bis-second-channel {
+  margin: 0px !important;
+  padding: 0px !important;
+  position: static !important;
+  vertical-align: baseline !important;
+  appearance: auto !important;
+  -webkit-appearance: radio !important;
+  height: 13px !important;
+  width: 13px !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  margin-right: 0px !important;
+}
+
+.peppy-popup-form-bis-default-channel {
+  margin-left: 4px !important;
+}
+
+.peppy-email-address-div {
+  display: flex !important;
+  width: 100% !important;
+  margin: 0px 0px 0px 0px !important;
+  padding: 0px !important;
+  box-sizing: border-box !important;
+}
+
+.peppy-phone-number-div {
+  display: flex !important;
+  width: 100% !important;
+  margin: 0px 0px 0px 0px !important;
+  padding: 0px !important;
+  box-sizing: border-box !important;
+  justify-content: space-between;
+}
+
+.peppy-popup-form-countrycode-dropdown {
+  margin: 0px !important;
+  border: 1px solid rgb(118, 118, 118) !important;
+  font-family: inherit !important;
+  font-size: 16px !important;
+  padding: 0px 10px 0px 10px !important;
+  height: 46px !important;
+  width: 50% !important;
+  margin-right: 12px !important;
+  background-color: #ffffff !important;
+  color: rgb(51, 51, 51) !important;
+  border-radius: 5px !important;
+  box-sizing: border-box !important;
+  line-height: normal !important;
+  appearance: auto !important;
+  background-image: none !important;
+}
+
+.peppy-popup-form-number-field {
+  margin: 0px !important;
+  border: 1px solid rgb(118, 118, 118) !important;
+  background-color: #ffffff !important;
+  color: rgb(51, 51, 51) !important;
+  font-family: inherit !important;
+  font-size: 16px !important;
+  padding: 0px 10px 0px 10px !important;
+  height: 46px !important;
+  width: 50% !important;
+  border-radius: 5px !important;
+  border-width: 1px !important;
+  box-sizing: border-box !important;
+  line-height: normal !important;
+}
+.peppy-popup-form-email-field {
+  margin: 0px !important;
+  border: 1px solid rgb(118, 118, 118) !important;
+  font-family: inherit !important;
+  font-size: 16px !important;
+  padding: 0px 10px 0px 10px !important;
+  height: 46px !important;
+  width: 100% !important;
+  background-color: #ffffff !important;
+  color: rgb(51, 51, 51) !important;
+  border-radius: 5px !important;
+  border-width: 1px !important;
+  box-sizing: border-box !important;
+  line-height: normal !important;
+}
+
+.oos-variants:focus,
+.peppy-popup-form-countrycode-dropdown:focus,
+.peppy-popup-form-number-field:focus,
+.peppy-popup-form-email-field:focus {
+  border: 0px solid #e8f4f8 !important;
+  outline: 1px solid #e8f4f8 !important;
+}
+
+.peppy-popup-form-notifyme-button {
+  margin: 0px !important;
+  text-align: center !important;
+  background-color: var(
+    --peppy-popup-form-notifyme-button-background-color
+  ) !important;
+  color: var(--peppy-popup-form-notifyme-button-text-color) !important;
+  opacity: 1 !important;
+  border: none !important;
+  cursor: pointer !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  height: 50px !important;
+  margin-top: 20px !important;
+  padding: 0px !important;
+  line-height: 1.2 !important;
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  box-sizing: border-box !important;
+}
+
+.peppy-popup-form-error-message-div,
+.peppy-popup-form-success-message-div,
+.peppy-popup-form-duplicate-registration-message-div {
+  margin: 0px !important;
+  padding: 0px !important;
+  width: 100% !important;
+  font-size: 16px !important;
+  font-family: inherit !important;
+  line-height: normal !important;
+  box-sizing: border-box !important;
+  display: none !important;
+}
+
+.peppy-popup-form-error-message-div {
+  margin-top: 8px !important;
+  margin-bottom: -5px !important;
+}
+
+.peppy-popup-form-success-message-div {
+  margin-top: 15px !important;
+}
+
+.peppy-popup-form-tos-text-container {
+  width: 100% !important;
+  padding: 0px !important;
+  margin: 20px 0px 0px 0px !important;
+  box-sizing: border-box !important;
+}
+.peppy-popup-form-tos-text {
+  padding: 0px !important;
+  font-size: 16px !important;
+  margin: 0px !important;
+  font-family: inherit !important;
+  line-height: normal !important;
+  box-sizing: border-box !important;
+}
+
+.peppy-popup-form-branding {
+  margin: 0px !important;
+  padding: 0px !important;
+  font-size: 16px !important;
+  text-align: end !important;
+  margin-top: 10px !important;
+  display: none !important;
+  line-height: normal !important;
+  color: rgb(51, 51, 51) !important;
+}
