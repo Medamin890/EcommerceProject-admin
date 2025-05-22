@@ -14,8 +14,6 @@ import CustomerIcon from '../assets/costumers1.png'
 import CustomerIcon2 from '../assets/customers2.png'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-
-
 import favoriteIcon from'../assets/favorite1.png'
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
@@ -31,11 +29,11 @@ const rangeOptions = [
   { label: "This Year", value: "year" },
   { label: "All Time", value: "all" },
 ];
-const Dashboard = () => {
+const Dashboard = ({setActiveButton}) => {
   const [stats, setStats] = useState(null);
   const navigate =useNavigate();
   // range of summary stats
-    const [rangeSalesStats, setRangeSalesStats] = useState("week");
+    const [rangeSalesStats, setRangeSalesStats] = useState("month");
     const [rangeOrderStats, setRangeOrderStats] = useState("month");
     const [rangeCustomerStats, setRangeCustomerStats] = useState("year");
 
@@ -86,7 +84,7 @@ const Dashboard = () => {
                   value={rangeSalesStats}
                   onChange={(val) => setRangeSalesStats(val)}
                   size="small"
-                  style={{ width: 90 }}
+                  style={{ width: 96 }}
                 >
                   {rangeOptions.map((r) => (
                     <Option key={r.value} value={r.value}>
@@ -151,7 +149,7 @@ const Dashboard = () => {
                   value={rangeCustomerStats}
                   onChange={(val) => setRangeCustomerStats(val)}
                   size="small"
-                  style={{ width: 90 }}
+                  style={{ width: 96 }}
                 >
                   {rangeOptions.map((r) => (
                     <Option key={r.value} value={r.value}>
@@ -222,39 +220,46 @@ const Dashboard = () => {
                     <td className="px-4 py-2 font-serif text-gray-800" >{order.address?.firstName} {order.address?.lastName} </td>
                     <td className="px-4 py-2 text-red-500   font-medium">${order.amount.toFixed(2)}</td>
                     <td className="px-4 py-2">
-                      {order?.payment
-                          ?  <span className="text-blue-500 font-medium">True</span> 
-                          :  <span className="text-red-500 font-medium">False</span> 
-                      }
+                      <span
+                        className={`px-2 py-1  w-max flex text-center rounded text-white text-xs ${
+                          order?.payment ? "bg-blue-500" : "bg-red-500"
+                        }`}
+                      >
+                        {order?.payment ? "Paid" : "Not Paid"}
+                      </span>
                     </td>
                     <td className="p-2 w-48 text-left">
-                                    <div className="flex p-2 justify-start text-left">
-                                      <div 
-                                        className={`flexBetween gap-x-3 items-start text-sm ${
-                                          order.status === "Out for Delivery" ? "text-blue-400" :
-                                          order.status === "Delivered" ? "text-green-500" :
-                                          order.status === "Product Loading" ? "text-orange-500" : "text-gray-500"
-                                        }`}
-                                      >
-                                        <div >
-                                          {order.status === "Out for Delivery" && ( 
-                                            <FaTruck className="text-blue-400" />)
-                                          }
-                                          {order.status === "Delivered" && ( 
-                                            <FaCheck className="text-green-500" />
-                                          )}
-                                          {order.status === "Product Loading" && ( 
-                                            <Spin indicator={<LoadingOutlined className='text-orange-500' spin/>} size="default" />
-                                          )}
-                                        </div>
-                                        <b className="text-[12px]">{order.status}</b>
-                                      </div>
-                                    </div>
+                      <div className="flex p-2 justify-start text-left">
+                        <div 
+                          className={`flexBetween gap-x-3 items-start text-sm ${
+                            order.status === "Out for Delivery" ? "text-blue-400" :
+                            order.status === "Delivered" ? "text-green-500" :
+                            order.status === "Product Loading" ? "text-orange-500" : "text-gray-500"
+                          }`}
+                        >
+                          <div >
+                            {order.status === "Out for Delivery" && ( 
+                              <FaTruck className="text-blue-400" />)
+                            }
+                            {order.status === "Delivered" && ( 
+                              <FaCheck className="text-green-500" />
+                            )}
+                            {order.status === "Product Loading" && ( 
+                              <Spin indicator={<LoadingOutlined className='text-orange-500' spin/>} size="default" />
+                            )}
+                          </div>
+                          <b className="text-[12px]">{order.status}</b>
+                        </div>
+                      </div>
                     </td>
                   <td className="p-2 flex items-center justify-center">
                     <button
                       title={"View Order "+ order._id}
-                      onClick={() => navigate(`/order/${order._id}`)}
+                      onClick={() =>{
+                                      navigate(`/Orders/${order._id}`);
+                                      setActiveButton('/Orders');
+                                    }
+                              }
                       className="rounded-full h-min text-blue-500 animation-btns hover:!text-blue-900 hover:!bg-gray-300 hover:!border-blue-900"
                     >
                       <ArrowRightOutlined className="text-xl p-1" />
@@ -310,8 +315,11 @@ const Dashboard = () => {
                       <td className="p-2 flex items-center justify-center">
                         <button
                           title={"View Customer "+ user.name}
-                          onClick={() => navigate(`/ManageUsers/${user._id}`)}
                           className="rounded-full h-min text-blue-500 animation-btns hover:!text-blue-900 hover:!bg-gray-300 hover:!border-blue-900"
+                          onClick={() =>{
+                                          navigate(`/ManageUsers/${user._id}`);
+                                          setActiveButton('/ManageUsers');
+                                  }}                        
                         >
                           <ArrowRightOutlined className="text-xl p-1" />
                         </button>
@@ -321,8 +329,8 @@ const Dashboard = () => {
               </tbody>
             </table>
           </div>
-        </div>
-        <div className="grid grid-cols-1 xl:grid-cols-2 h-full gap-4 my-4">
+          </div>
+          <div className="grid grid-cols-1 xl:grid-cols-2 h-full gap-4 my-4">
           {/* 3-Top Selling Products */}
           <div className="bg-gray-100  p-6 shadow rounded-xl overflow-auto">
             <h3 className="flex items-center  mb-4 font-semibold">
@@ -353,8 +361,11 @@ const Dashboard = () => {
                     <td className="p-4 items-center justify-center">
                         <button
                           title={"View product "+ item._id}
-                          onClick={() => navigate(`/listProducts/${item._id}`)}
                           className="rounded-full h-min text-blue-500 animation-btns hover:!text-blue-900 hover:!bg-gray-300 hover:!border-blue-900"
+                          onClick={() =>{
+                                          navigate(`/listProducts/${item._id}`);
+                                          setActiveButton('/listProducts');
+                                  }}     
                         >
                           <ArrowRightOutlined className="text-xl p-1" />
                         </button>
@@ -394,9 +405,12 @@ const Dashboard = () => {
                       <td className="p-4 items-center justify-center">
                         <button
                           title={"View product "+ product._id}
-                          onClick={() => navigate(`/listProducts/${product._id}`)}
                           className="rounded-full h-min text-blue-500 animation-btns hover:!text-blue-900 hover:!bg-gray-300 hover:!border-blue-900"
-                        >
+                          onClick={() =>{
+                                          navigate(`/listProducts/${product._id}`);
+                                          setActiveButton('/listProducts');
+                                  }}                          
+                           >
                           <ArrowRightOutlined className="text-xl p-1" />
                         </button>
                       </td>

@@ -15,10 +15,12 @@ import ManageUsers from "./pages/ManageUsers";
 import WebsiteInfoSetting from "./pages/WebsiteInfoSetting";
 export default function App() {
 
+    const [activeButton, setActiveButton] = useState('/'); 
     const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : "")
     useEffect(() => {
         localStorage.setItem('token', token)
-    }, [token])
+    }, [token]) 
+    // Track the active button of the sidebar 
 
     const [collapsed, setCollapsed] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -57,7 +59,7 @@ export default function App() {
          <div className=" flex  bg-gray-10  h-screen">
            {/* Sidebar */}
            <div className=" pl-4 py-2  shadow-lg first-line:drop-shadow-md h-[695px] rounded-2xl xs:mr-8 mr-3 bg-white ">
-             <Sidebar collapsed={collapsed} toggleSidebar={toggleSidebar}/>
+             <Sidebar collapsed={collapsed} toggleSidebar={toggleSidebar} activeButton={activeButton} setActiveButton={setActiveButton}/>
            </div>
    
            {/* Main Content Area */}
@@ -70,7 +72,7 @@ export default function App() {
              {/* Content */}
              <div className=" overflow-y-auto   pl-0  min-h-[calc(100%-100px)]   bg-white  shadow-md rounded-2xl">
                <Routes>
-                 <Route path="/" element={<Dashboard  setToken={setToken}/>} />
+                 <Route path="/" element={<Dashboard  setToken={setToken}  setActiveButton={setActiveButton}/>} />
                  <Route path="/ADDproduct" element={<AddProduct setToken={setToken} />} />
                  <Route path="/listProducts/:id?" element={<List  token={token} setToken={setToken} />} />
                  <Route path="/Orders/:id?" element={<Orders setToken={setToken} />} />

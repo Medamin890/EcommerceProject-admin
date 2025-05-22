@@ -1,26 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { HiMenu } from 'react-icons/hi'; // Only import HiMenu
 import { FiPlusCircle, FiList, FiShoppingCart } from 'react-icons/fi'; // Icons for items
 import { RxDashboard } from "react-icons/rx";
-import { BiLogOut } from "react-icons/bi";
 import { Popconfirm, Tooltip } from 'antd';
 import { TfiLayoutSlider } from "react-icons/tfi";
 import { FaUsers, FaUsersCog } from 'react-icons/fa';
 
-const Sidebar = ({collapsed,toggleSidebar}) => {
-  const [activeButton, setActiveButton] = useState('/'); // Track the active button
+const Sidebar = ({collapsed,toggleSidebar,activeButton, setActiveButton}) => {
+  const location = useLocation(); // gets the current location
   const navigate = useNavigate();
-
-
-
-
-
   const navigateTo = (path) => {
     setActiveButton(path); // Update the active button
     navigate(path);
   };
+  useEffect(() => {
+    const path = location.pathname;
+    console.log(path)
+    if (path.includes("/ADDproduct")) {
+      setActiveButton("/ADDproduct");
+   } else if (path.includes("/Orders")) {
+      setActiveButton("/Orders");
+    } else if (path.includes("/listProducts")) {
+      setActiveButton("/listProducts");
+    } else if (path.includes("/HomeBunners")) {
+      setActiveButton("/HomeBunners");
+    } else if (path.includes("/ManageAdmins")) {
+      setActiveButton("/ManageAdmins");
+    } else if (path.includes("/ManageUsers")) {
+      setActiveButton("/ManageUsers");
+    } else  setActiveButton("/");
 
+  }, [location.pathname,activeButton]);
   return (
     <div
       className={`flex ${collapsed ? 'w-16' : 'w-64'} rounded-2xl text-gray-800 transition-all duration-300 `}
