@@ -152,9 +152,9 @@ const CreateAdminModal = ({ open, onClose }) => {
           onChange={handleRoleChange}
 
         >
-          <Option value="superAdmin">
+          <Option value="master">
             <div className='flex items-center gap-2'>
-                <FaUserTie    className=" text-gray-500 text-lg  mr-1" />Super Admin
+                <FaUserTie    className=" text-gray-500 text-lg  mr-1" />Master
             </div>
             </Option>
           <Option value="admin" >
@@ -168,7 +168,7 @@ const CreateAdminModal = ({ open, onClose }) => {
           type="primary"
           onClick={handleSubmit}
           loading={loading}
-          className="w-full"
+          className="w-full animation-btns"
         >
           <HiUserAdd  className=" text-lg" />
           Create

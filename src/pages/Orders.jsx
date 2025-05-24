@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Table, Input, Select, Spin } from "antd";
-import { FaCalendar, FaCalendarWeek, FaCheck, FaLocationDot, FaTruck } from "react-icons/fa6";
+import { FaCalendar, FaCalendarWeek, FaCheck, FaLocationDot, FaRegCalendar, FaTruck } from "react-icons/fa6";
 import {  FaPhone, FaUser } from "react-icons/fa";
 import { LoadingOutlined, MailFilled, SearchOutlined } from "@ant-design/icons";
 import { PiThreeDFill } from "react-icons/pi";
@@ -10,21 +10,22 @@ import moment from "moment";
 import { Button, Popover, Radio } from "antd";
 import { RiEditLine } from "react-icons/ri";
 import { TbFilter, TbFilterDollar } from "react-icons/tb";
-import { IoCalendarNumber, IoTodaySharp } from "react-icons/io5";
+import { IoCalendarNumber, IoCloseCircle, IoTodaySharp } from "react-icons/io5";
 import { BsFilterLeft } from "react-icons/bs";
 import { TbBasketExclamation } from "react-icons/tb";
 import { TbBasketCheck } from "react-icons/tb";
-import { useParams } from "react-router-dom";
-import Search from "antd/es/transfer/search";
+import { useNavigate, useParams } from "react-router-dom";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import Search from "antd/es/input/Search";
 const { Option } = Select;
 
 const Orders = () => {
   const { id } = useParams();
+  const navigate =useNavigate();
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [searchId, setSearchId] = useState("");
-  const [dateFilter, setDateFilter] = useState("last3days");
+  const [dateFilter, setDateFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [paidFilter, setPaidFilter] = useState("");
 
@@ -62,7 +63,7 @@ const Orders = () => {
     setFetched(result); // Save base result
   }, [orders, id]);
   
-// Step 2: Refine filters from search by ID/Date pick rang /status/ayment true or false.
+// Step 2: Refine filters from search by ID/Date pick range /status/ayment true or false.
   const filterOrders = () => {
     let result = [...fetched];
 
@@ -73,10 +74,10 @@ const Orders = () => {
               || order._id == searchId
       );
     }
-    // Filter by Date
+    // Filter by Date of creation 
     const now = moment();
     result = result.filter((order) => {
-      const orderDate = moment(order.createdAt);
+      const orderDate = moment(order.date);
       if (dateFilter === "today") return orderDate.isSame(now, "day");
       if (dateFilter === "last3days") return now.diff(orderDate, "days") <= 3;
       if (dateFilter === "lastweek") return now.diff(orderDate, "weeks") < 1;
@@ -91,8 +92,11 @@ const Orders = () => {
 
     // Filter by payment true or false
     if (paidFilter && paidFilter !== "all") {
-      const paid = paidFilter === "paid";
-      result = result.filter((order) => order.paid === paid);
+      if (paidFilter ==="paid") {
+        result = result.filter((order) => order.payment === true);
+      }else if (paidFilter === "notPaid") {
+        result = result.filter((order) => order.payment === false);
+      }
     }
 
     setFilteredOrders(result);
@@ -341,15 +345,16 @@ const [selectedStatus, setSelectedStatus] = useState("Product Loading");
  ];
 
   return (
-    <section className="px-6 md:px-12 pt-8">
-      <h1 className="text-2xl font-bold mb-4">Orders Management</h1>
+    <section className="px-12 pt-12">
+      <h1 className="text-2xl font-bold mb-8">Orders Management</h1>
 
-      {/* Filters */}
-      <div className="flex flex-row w-full gap-4 py-4">
+      {/* Filters  searchbar  filterby date , status, payment*/}
+      <div className="flex flex-row w-full gap-4 mb-8">
       <Search
         prefix={<SearchOutlined />}
         placeholder="Search by Order ID"
         enterButton="Search"
+      
         value={searchId}
         onChange={(e) => setSearchId(e.target.value)}
         suffix={
@@ -363,9 +368,9 @@ const [selectedStatus, setSelectedStatus] = useState("Product Loading");
                 setPaidFilter("");      
                 navigate("/Orders");       // optional: reset route param
               }}
-              className="text-red-500 text-xl cursor-pointer hover:scale-110 transition-transform rounded-full hover:bg-gray-100/10"
+              className=" text-gray-400 text-xl cursor-pointer hover:!scale-110 animation-btn rounded-full hover:bg-gray-200 hover:text-black/60"
             >
-              <IoIosCloseCircleOutline className="text-lg" />
+              <IoCloseCircle className="text-lg" />
             </button>
           )
         }
@@ -373,10 +378,10 @@ const [selectedStatus, setSelectedStatus] = useState("Product Loading");
       />
 
         <Select
-          prefix ={ !dateFilter && <FaCalendar  className="text-lg text-gray-500"/>}
+          prefix ={ !dateFilter && <FaRegCalendar   className="text-lg text-gray-500"/>}
+          placement="Filter by Date"
           placeholder={<span className="text-gray-400 text-sm font-mono">Filter by Date</span>}
           allowClear
-          value={dateFilter}
           onChange={setDateFilter}
           className="w-full max-w-44 !ring-1 rounded-md hover:!ring-transparent hover:!duration-300 !ring-black "
         >
@@ -417,23 +422,23 @@ const [selectedStatus, setSelectedStatus] = useState("Product Loading");
           placeholder={<span className="text-gray-400 text-sm font-mono">Filter by Status</span>}
           allowClear
           onChange={setStatusFilter}
-          className="w-full max-w-44 !ring-1 rounded-md hover:!ring-transparent hover:!duration-300 !ring-black "
+          className="w-full max-w-48 !ring-1 rounded-md hover:!ring-transparent hover:!duration-300 !ring-black "
         >
-            <Option value="all">
+            <Option value="all" >
               <span className="flex items-center gap-x-2 text-gray-700">
-                <BsFilterLeft  className="text-xl"  />
+                <BsFilterLeft  className="text-lg"  />
                 All
               </span>
             </Option>
              <Option value="Delivered">
                 <span className="flex items-center gap-x-2 text-green-500">
-                <FaCheck   className="text-xl " />
+                <FaCheck   className="text-lg" />
                 Delivered
               </span>
             </Option>
              <Option value="Out for Delivery">
                 <span className="flex items-center gap-x-2 text-blue-500">
-                <FaTruck   className="text-xl " />
+                <FaTruck   className="text-lg " />
                 Out for Delivery
               </span>
             </Option>
@@ -452,7 +457,7 @@ const [selectedStatus, setSelectedStatus] = useState("Product Loading");
           placeholder={<span className="text-gray-400 text-sm font-mono">Filter by Payment</span>}
           allowClear
           onChange={setPaidFilter}
-          className="w-full max-w-52 !ring-1 rounded-md hover:!ring-transparent hover:!duration-300 !ring-black "
+          className="w-full max-w-[200px] !ring-1 rounded-md hover:!ring-transparent hover:!duration-300 !ring-black "
         >
             <Option value="all">
               <span className="flex items-center gap-x-2 text-gray-700">
@@ -460,13 +465,13 @@ const [selectedStatus, setSelectedStatus] = useState("Product Loading");
                 All
               </span>
             </Option>
-            <Option value="Paid">
+            <Option value="paid">
                 <span className="flex items-center gap-x-2 text-green-500">
                 <TbBasketCheck   className="text-xl"  />
                 Paid
               </span>
             </Option>
-            <Option value="notpaid">
+            <Option value="notPaid">
                 <span className="flex items-center gap-x-2 text-red-700">
                 <TbBasketExclamation   className="text-xl " />
                 Not Paid
@@ -474,7 +479,6 @@ const [selectedStatus, setSelectedStatus] = useState("Product Loading");
             </Option>
         </Select>
       </div>
-
       {/* Table */}
       <Table
         bordered
@@ -482,7 +486,6 @@ const [selectedStatus, setSelectedStatus] = useState("Product Loading");
         dataSource={filteredOrders}
         rowKey="_id"
       />
-      {/* //change status modal  */}
     
     </section>
   );

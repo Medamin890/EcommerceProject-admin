@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
+import UpdateProduct from "../components/LIST/UpdateProduct";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Table, Input, Select, Button, Popconfirm, Tooltip } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-
-import { FaClosedCaptioning, FaEdit, FaSearch, FaTrash } from "react-icons/fa";
-import { IoIosCloseCircleOutline } from "react-icons/io";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import UpdateProduct from "../components/LIST/UpdateProduct";
-import { useNavigate, useParams } from "react-router-dom";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { IoMdStarOutline } from "react-icons/io";
 import { CgUnavailable } from "react-icons/cg";
 import { LuFilter, LuPackageCheck, LuStarOff } from "react-icons/lu";
 import { BiTimer } from "react-icons/bi";
 import { BsFilterLeft } from "react-icons/bs";
 import { TbFilterStar } from "react-icons/tb";
+import { IoCloseCircle } from "react-icons/io5";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { RiEditBoxLine } from "react-icons/ri";
 const { Search } = Input;
 const { Option } = Select;
 
@@ -114,8 +114,7 @@ useEffect(() => {
   };
 
   const columns = [
-    {
-      title: "Image",
+    {title: "Image",
       dataIndex: "images",
       render: (images) =>
         images && images.length > 0 ? (
@@ -124,56 +123,57 @@ useEffect(() => {
           <span>No Image</span>
         ),
     },
-    {
-      title: "Name",
+    {title: "Name",
       dataIndex: "name",
     },
-    {
-      title: "Category",
+    {title: "Category",
     render: (_, record) =>
       `${record.category} / ${record.subCategory}${record.subSubCategory && ` / ${record.subSubCategory}` }`,
         },
-    {
-    title: "Status",
-    dataIndex: "status",
-    render: (status) => {
-      if (status === "In stock") {
-        return (
-          <span className="flex items-center gap-x-2 text-green-500 w-max" >
-            <LuPackageCheck className="text-xl" />
-            In Stock
-          </span>
-        );
-      } else if (status === "Out stock") {
-        return (
-          <span className="flex items-center gap-x-2 text-red-500 w-max">
-            <CgUnavailable className="text-xl" />
-            Out Stock
-          </span>
-        );
-      } else if (status === "On order") {
-        return (
-          <span className="flex items-center gap-x-2 text-blue-500 w-max">
-            <BiTimer className="text-xl" />
-            On Order
-          </span>
-        );
-      } else {
-        return <span>{status}</span>; // fallback for unknown status
-      }
+    {title: "Status",
+      dataIndex: "status",
+      render: (status) => {
+        if (status === "In stock") {
+          return (
+            <span className="flex items-center gap-x-2 text-green-500 w-max" >
+              <LuPackageCheck className="text-xl" />
+              In Stock
+            </span>
+          );
+        } else if (status === "Out stock") {
+          return (
+            <span className="flex items-center gap-x-2 text-red-500 w-max">
+              <CgUnavailable className="text-xl" />
+              Out Stock
+            </span>
+          );
+        } else if (status === "On order") {
+          return (
+            <span className="flex items-center gap-x-2 text-blue-500 w-max">
+              <BiTimer className="text-xl" />
+              On Order
+            </span>
+          );
+        } else {
+          return <span>{status}</span>; // fallback for unknown status
+        }
+      },
     },
-  },
-    {
-      title: "Price",
+    {title: "Price",
       dataIndex: "price",
       render: (price) => <span className="text-red-500 font-medium">${price}</span> ,
     },
-    {
-      title: "Actions",
+    {title: "Actions",
       render: (_, record) => (
         <div className="flex gap-2">
           <Tooltip title="Edit">
-            <Button type="primary" icon={<FaEdit />} onClick={() => openEditModal(record)} />
+            <Button  
+              onClick={openEditModal}
+              type="primary"
+              className='px-2 py-1'
+              >
+              <RiEditBoxLine className='text-lg '/>
+            </Button>
           </Tooltip>
           <Popconfirm
             title="Are you sure to delete this product?"
@@ -182,7 +182,11 @@ useEffect(() => {
             cancelText="No"
           >
             <Tooltip title="Delete">
-              <Button danger icon={<FaTrash />} />
+              <Button 
+                className='px-2 py-1'
+                danger
+                icon={<FaTrash />} 
+              />
             </Tooltip>
           </Popconfirm>
         </div>
@@ -193,102 +197,106 @@ useEffect(() => {
   return (
     <div className="px-12 pt-12">
       <h1 className="text-2xl font-bold mb-8">Product List</h1>
-
+      {/* the Filters  */}
       <div className="flex flex-row gap-4 mb-8 items-center">
-      <Search
-        prefix={<SearchOutlined />}
-        placeholder="Search by name or category..."
-        enterButton="Search"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        suffix={
-          searchTerm && (
-              <button
-                  title="Clear search bar"
-                  onClick={() => {
-                    setSearchTerm("");
-                    setPopularFilter("");      // optional: reset filter
-                    setStatusFilter("");    // optional: reset filter
-                    navigate("/listProducts"); // clear route param
-                  }}
-                  className="text-red-500 text-xl cursor-pointer hover:!scale-125  animation-btn rounded-full  hover:bg-gray-50/10"
-                >    
-                  <IoIosCloseCircleOutline className="text-lg"/>
-              </button>
-          )}
-        className="w-full"
-      />
+        {/* search  */}
+        <Search
+          prefix={<SearchOutlined />}
+          placeholder="Search by name or category..."
+          enterButton="Search"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          suffix={
+            searchTerm && (
+                <button
+                    title="Clear search bar"
+                    onClick={() => {
+                      setSearchTerm("");
+                      setPopularFilter("");      // optional: reset filter
+                      setStatusFilter("");    // optional: reset filter
+                      navigate("/listProducts"); // clear route param
+                    }}
+                className=" text-gray-400 text-xl cursor-pointer hover:!scale-110 animation-btn rounded-full hover:bg-gray-200 hover:text-black/60"
+                  >    
+                    <IoCloseCircle className="text-lg"/>
+                </button>
+            )}
+          className="w-full"
+        />
 
-
+        {/* filter by Popularity  */}
         <Select
-          placeholder="Filter by Popularity"
-          prefix={!popularFilter && <TbFilterStar   className="text-xl"/>}
-          onChange={setPopularFilter}
-          style={{ width: 200 }}
-          allowClear
+            placeholder="Filter by Popularity"
+            prefix={!popularFilter && <TbFilterStar   className="text-xl"/>}
+            onChange={setPopularFilter}
+            style={{ width: 200 }}
+            allowClear
 
-        >
-          <Option value="all">
-            <span className="flex items-center gap-x-2 text-gray-700">
-              <BsFilterLeft  className="text-xl"  />
-              All
-            </span>
-          </Option>
-          <Option value="popular">
-             <span className="flex items-center gap-x-2 text-yellow-500">
-              <IoMdStarOutline  className="text-xl"  />
-              Popular
-            </span>
-          </Option>
-          <Option value="notPopular">
-             <span className="flex items-center gap-x-2 text-red-700">
-              <LuStarOff  className="text-xl px-1 pl-px ml-px" />
-              Not Popular
-            </span>
-          </Option>
+          >
+            <Option value="all">
+              <span className="flex items-center gap-x-2 text-gray-700">
+                <BsFilterLeft  className="text-xl"  />
+                All
+              </span>
+            </Option>
+            <Option value="popular">
+              <span className="flex items-center gap-x-2 text-yellow-500">
+                <IoMdStarOutline  className="text-xl"  />
+                Popular
+              </span>
+            </Option>
+            <Option value="notPopular">
+              <span className="flex items-center gap-x-2 text-red-700">
+                <LuStarOff  className="text-xl px-1 pl-px ml-px" />
+                Not Popular
+              </span>
+            </Option>
         </Select>
 
+        {/* filter by  status  */}
         <Select
-          prefix={!statusFilter && <LuFilter className="text-xl"/>}
-          onChange={setStatusFilter}
-          style={{ width: 200 }}
-          placeholder="Filter by Status"
-          allowClear
-        >
-          <Option value="all">
-            <span className="flex items-center gap-x-2 text-gray-700">
-              <BsFilterLeft  className="text-xl"  />
-              All
-            </span>
+            prefix={!statusFilter && <LuFilter className="text-xl"/>}
+            onChange={setStatusFilter}
+            style={{ width: 200 }}
+            placeholder="Filter by Status"
+            allowClear
+          >
+            <Option value="all">
+              <span className="flex items-center gap-x-2 text-gray-700">
+                <BsFilterLeft  className="text-xl"  />
+                All
+              </span>
+              </Option>
+            <Option value="In stock">
+              <span className="flex items-center gap-x-2 text-green-500">
+                <LuPackageCheck  className="text-xl" />
+                  In Stock
+              </span>
             </Option>
-          <Option value="In stock">
-             <span className="flex items-center gap-x-2 text-green-500">
-              <LuPackageCheck  className="text-xl" />
-                In Stock
-            </span>
-          </Option>
-          <Option value="Out stock">
-            <span className="flex items-center gap-x-2 text-red-500">
-              <CgUnavailable className="text-xl" />
-                Out Stock
-            </span>
+            <Option value="Out stock">
+              <span className="flex items-center gap-x-2 text-red-500">
+                <CgUnavailable className="text-xl" />
+                  Out Stock
+              </span>
+              </Option>
+            <Option value="On order">
+              <span className="flex items-center gap-x-2 text-blue-500">
+              <BiTimer  className="text-xl" />
+              On Order
+              </span>
             </Option>
-          <Option value="On order">
-            <span className="flex items-center gap-x-2 text-blue-500">
-            <BiTimer  className="text-xl" />
-            On Order
-            </span>
-          </Option>
         </Select>
+        
       </div>
-
+      {/* the display List product  */}
       <Table
         rowKey="_id"
         columns={columns}
         dataSource={filtered}
         pagination={{ pageSize: 10 }}
       />
-
+      
+      {/* the Edit product modal tag  */}
       {isEditModalOpen && (
         <div
           className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center transition-opacity duration-300 ${

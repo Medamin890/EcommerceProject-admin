@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { RiImageAddLine } from "react-icons/ri";
-import { FaEdit, FaSearch, FaTrash } from "react-icons/fa";
-import { Popconfirm, Tooltip, Modal } from "antd";
+import { RiEditBoxLine, RiImageAddLine } from "react-icons/ri";
+import {  FaSearch, FaTrash } from "react-icons/fa";
+import { Popconfirm, Tooltip, Modal, Button } from "antd";
 import { toast } from "react-toastify";
 import AddHomeBunnerForm from "../components/HomeBunners/AddHomeBunners";
 import UpdateHomeBunnerForm from "../components/HomeBunners/UpdateHomeBunner";
@@ -67,7 +67,7 @@ const HomeBanners = () => {
 
   return (
     <div className="px-12 pt-12">
-      <h1 className="text-2xl font-bold mb-4">Home Banners</h1>
+      <h1 className="text-2xl font-bold mb-8">Home Banners</h1>
 
       {/* Search Bar */}
       <div className="flex items-center mb-6 gap-4 pr-2">
@@ -77,16 +77,16 @@ const HomeBanners = () => {
             placeholder="Search product by name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-10 pr-4 h-9 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
           <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
         </div>
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 flex items-center gap-2 text-sm"
         >
-          <RiImageAddLine className="inline-block mr-2" />
+          <RiImageAddLine className="text-xl inline-block" />
           Add Home Banner
         </button>
       </div>
@@ -122,27 +122,33 @@ const HomeBanners = () => {
                       </span>
                     </div>
                   </td>
-                  <td className="p-2 w-28 gap-x-2">
-                    <Tooltip placement="top" title="Edit Banner" color="#061178">
-                      <button
-                        className="mr-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                        onClick={() => handleEdit(banner)}
-                      >
-                        <FaEdit />
-                      </button>
-                    </Tooltip>
-                    <Popconfirm
-                      title="Are you sure to delete this banner?"
-                      onConfirm={() => handleDelete(banner._id)}
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <Tooltip placement="top" title="Delete Banner" color="#820014">
-                        <button className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-                          <FaTrash />
-                        </button>
-                      </Tooltip>
-                    </Popconfirm>
+                  {/* Action Edit and delete bunner */}
+                  <td >
+                    <div className="flexCenter gap-2 items-center">
+                        <Tooltip placement="top" title="Edit Banner" color="#061178">
+                          <Button
+                            onClick={() => handleEdit(banner)}
+                            type="primary"
+                            className='px-2 py-1'
+                            >
+                            <RiEditBoxLine className='text-lg '/>
+                          </Button>
+                        </Tooltip>
+                        <Popconfirm
+                          title="Are you sure to delete this banner?"
+                          onConfirm={() => handleDelete(banner._id)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <Tooltip placement="top" title="Delete Banner" color="#820014">
+                            <Button 
+                              className='px-2 py-1'
+                              danger
+                              icon={<FaTrash />} 
+                            />
+                          </Tooltip>
+                        </Popconfirm>
+                    </div>
                   </td>
                 </tr>
               ))}

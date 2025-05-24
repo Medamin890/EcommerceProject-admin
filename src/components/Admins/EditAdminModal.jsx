@@ -80,7 +80,7 @@ const EditAdminModal = ({ open, onClose, adminData }) => {
     try {
       setLoading(true);
       await axios.put('api/admins/edit/', formData);
-      toast.success("Admin "+formData.name +" "+ formData.lastName+" updated successfully!");
+      toast.success(+formData.name +" "+ formData.lastName+" updated successfully!");
       onClose();
     } catch (err) {
       console.error(err);
@@ -182,9 +182,9 @@ const EditAdminModal = ({ open, onClose, adminData }) => {
           onChange={handleRoleChange}
 
         >
-          <Option value="superAdmin">
+          <Option value="master">
             <div className='flex items-center gap-2'>
-                <FaUserTie    className=" text-gray-500 text-lg  mr-1" />Super Admin
+                <FaUserTie    className=" text-gray-500 text-lg  mr-1" />Master
             </div>
             </Option>
           <Option value="admin" >
@@ -197,7 +197,7 @@ const EditAdminModal = ({ open, onClose, adminData }) => {
           type="primary"
           onClick={handleSubmit}
           loading={loading}
-          className="w-full"
+          className="w-full animation-btns"
         >
           <RiEditBoxLine  className="text-lg" />
           Edit 
