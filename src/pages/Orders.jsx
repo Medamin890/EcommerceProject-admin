@@ -300,18 +300,16 @@ const [selectedStatus, setSelectedStatus] = useState("Product Loading");
             </label>
           </div>
           </div> 
-          <Button
-            type="primary"
-            icon={<RiEditLine />}
-            size="small"
-            className="rounded-md mt-2"
+          <button
+            className="rounded-md mt-2 hover:!scale-105 flexCenter gap-1 animation-btns bg-blue-500 hover:bg-blue-500/70 text-white"
             onClick={() => {
               statusHandler({ target: { value: selectedStatus } }, record._id);
               setPopoverVisibleId(null);
             }}
-          >
+            >
+            <RiEditLine />
             <span >Save</span>
-          </Button>
+          </button>
         </div>
       );
 

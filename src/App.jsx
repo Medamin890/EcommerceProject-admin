@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
-import Topbar from "./components/Topbar";
+import Sidebar from "./components/app/Sidebar";
+import Topbar from "./components/app/Topbar";
 import Dashboard from "./pages/dashbord";
 import { ToastContainer } from "react-toastify"; // Import toast
 import "react-toastify/dist/ReactToastify.css"; // Import toast CSS
@@ -13,13 +13,42 @@ import HomeBunners from "./pages/HomeBunners";
 import ManageAdmins from "./pages/ManageAdmins";
 import ManageUsers from "./pages/ManageUsers";
 import WebsiteInfoSetting from "./pages/WebsiteInfoSetting";
+import axios from "axios";
 export default function App() {
+  const [activeButton, setActiveButton] = useState('/'); 
+  const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : "")
+  useEffect(() => {
+      localStorage.setItem('token', token);
+      console.log(token);
+  }, []) 
 
-    const [activeButton, setActiveButton] = useState('/'); 
-    const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : "")
-    useEffect(() => {
-        localStorage.setItem('token', token)
-    }, [token]) 
+  const [admin, setAdmin] = useState({
+         name: '',
+         role: '' 
+       }
+    );
+
+useEffect(() => {
+  const fetchAdmin = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/admins/getAdmin",{
+          headers: { token },
+        });
+        const adminInfo = {
+          name: response.data?.name,
+          role: response.data?.role
+        };
+        setAdmin(adminInfo);
+      } catch (error) {
+        console.error("Failed to fetch admin info", error);
+      }
+  };
+
+  fetchAdmin();
+}, []); 
+
+
+
     // Track the active button of the sidebar 
 
     const [collapsed, setCollapsed] = useState(false);
@@ -51,7 +80,7 @@ export default function App() {
    
       { token ==="" 
       ?(
-        <Login  setToken={setToken}/>
+        <Login  setToken={setToken} admin={admin} setAdmin={setAdmin}/>
        ):(
         <BrowserRouter>
       
@@ -66,7 +95,7 @@ export default function App() {
            <div className="flex flex-col flex-grow  ">
              {/* Topbar(Header) */}
              <div className=" px-4 py-2  shadow-md rounded-2xl mb-4 bg-white" >
-               <Topbar token={token} setToken={setToken} />
+               <Topbar token={token} setToken={setToken} admin={admin}/>
              </div>
    
              {/* Content */}
@@ -79,7 +108,7 @@ export default function App() {
                  <Route path="/HomeBunners" element={<HomeBunners setToken={setToken} />} />
                  <Route path="/ManageAdmins/:id?" element={<ManageAdmins setToken={setToken} />} />
                  <Route path="/ManageUsers/:id?" element={<ManageUsers setToken={setToken} />} />
-                 <Route path="/WebsiteInfoSetting" element={<WebsiteInfoSetting setToken={setToken} collapsed={collapsed} />} />
+                 <Route path="/WebsiteInfoSetting" element={<WebsiteInfoSetting  collapsed={collapsed} />} />
                </Routes>
              </div>
            </div>

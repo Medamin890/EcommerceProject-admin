@@ -5,7 +5,7 @@ import topIcon from '../assets/Top_ribbon.png'
 import ordersIcon from '../assets/orders.png'
 import orderIcon from '../assets/order.png'
 import salesIcon from '../assets/sales1.png'
-import { FaCircleUser } from "react-icons/fa6" 
+import { FaCircleUser, FaDollarSign } from "react-icons/fa6" 
 import {  FaCheck, FaEye, FaTruck, FaYenSign } from 'react-icons/fa'; // Assuming this icon is needed
 import { ArrowRightOutlined, LoadingOutlined } from '@ant-design/icons';
 import CustomerIcon from '../assets/costumers1.png'
@@ -14,7 +14,8 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import favoriteIcon from'../assets/favorite1.png'
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid,
+    
+    AreaChart,Area, XAxis, YAxis, CartesianGrid,
     PieChart,
     Pie,
     Cell,
@@ -38,15 +39,16 @@ const rangeOptions = [
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#d946ef", "#a855f7"];
 
 const ChartCard = ({ title, data }) => (
-  <div className="bg-transparent  rounded-2xl p-4 w-full md:w-[48%] lg:w-[48%] xl:w-[48%] xl:mb-0 mb-4">
-    <h2 className="text-lg font-semibold text-gray-700 mb-2">{title}</h2>
-    <ResponsiveContainer width="100%" height={250}>
+  <div className="bg-transparent  rounded-2xl  p-4 w-full md:w-[48%] lg:w-[48%] xl:w-[48%] xl:mb-0 mb-4">
+    <h2 className=" font-semibold text-green-900 mb-2 w-full text-center">{title}</h2>
+    <ResponsiveContainer width="100%" height={270}>
       <PieChart>
         <Pie
           data={data}
           dataKey="value"
           nameKey="name"
           outerRadius={80}
+          fill="#8884d8"
           label
         >
           {data?.map((entry, index) => (
@@ -61,7 +63,7 @@ const ChartCard = ({ title, data }) => (
 );
 const Dashboard = ({setActiveButton}) => {
   const [summaryCardStats, setSummaryCardStats] = useState(null);
-  const [lineChartStats, setLineChartStats] = useState(null);
+  const [areaChartStats, setAreaChartStats] = useState(null);
   const [tableStats, setTableStats] = useState(null);
   const [pieChartStats, setPieChartStats] = useState(null);
   const Url = "http://localhost:4000";
@@ -73,45 +75,39 @@ const Dashboard = ({setActiveButton}) => {
   const [rangeCustomerStats, setRangeCustomerStats] = useState("year");
 
 
-
-
   
-  //✅ 1.  fetch summaryCardStats  Section
-  useEffect(() => {
-    const fetchsummaryCardStats = async () => {
-      try {
-          const res = await axios.get(Url+"/api/dashboard/getSummaryCardStats", {
-            params: {
-              rangeSalesStats,
-              rangeOrderStats,
-              rangeCustomerStats,
-            },
-          });
-        setSummaryCardStats(res.data);
-        console.log("summaryCardStats :", summaryCardStats)
-      } catch (err) {
-        console.error("Failed to fetch summaryCardStats stats", err);
-      }
-    };
-    fetchsummaryCardStats();
-  }, [rangeSalesStats,rangeOrderStats,rangeCustomerStats]);
+    //✅ 1.  fetch summaryCardStats  Section
+    useEffect(() => {
+      const fetchsummaryCardStats = async () => {
+        try {
+            const res = await axios.get(Url+"/api/dashboard/getSummaryCardStats", {
+              params: {
+                rangeSalesStats,
+                rangeOrderStats,
+                rangeCustomerStats,
+              },
+            });
+          setSummaryCardStats(res.data);
+          console.log("summaryCardStats :", summaryCardStats)
+        } catch (err) {
+          console.error("Failed to fetch summaryCardStats stats", err);
+        }
+      };
+      fetchsummaryCardStats();
+    }, [rangeSalesStats,rangeOrderStats,rangeCustomerStats]);
 
-  //✅ 2.  fetch lineChartStats Stats Section
-  useEffect(() => {
-    const fetchlineChartStats = async () =>{
+    //✅ 2.  fetch AreaChart Stats Section
+    const fetchAreaChart= async () =>{
        try {
-        const data = await axios.get(Url+"/api/dashboard/getLineChartStats") ;
-        setLineChartStats(data.data || []);
-        console.log("linecart" , lineChartStats );
+        const data = await axios.get(Url+"/api/dashboard/getAreaChartStats") ;
+        setAreaChartStats(data.data || []);
+        console.log("AreaChart" , areaChartStats );
        } catch (error) {
-         console.error("Error fetching lineChart data:", error);
+         console.error("Error fetching AreaChart data:", error);
        }
     }; 
-    fetchlineChartStats();
-    }, []);
 
-  //✅ 3.  fetch table Stats Section
-  useEffect(() => {
+    //✅ 3.  fetch table Stats Section
     const fetchtableStats= async () =>{
        try {
         const data = await axios.get(Url+"/api/dashboard/getTableStats") ;
@@ -120,19 +116,20 @@ const Dashboard = ({setActiveButton}) => {
          console.error("Error fetching table data:", error);
        }
     }; 
-    fetchtableStats();
-    }, []);
 
-  //✅ 4.  fetch PieChart Stats Section
-  useEffect(() => {
+    //✅ 4.  fetch PieChart Stats Section
     const fetchPieChartStats = async () =>{
-       try {
+      try {
         const data = await axios.get(Url+"/api/dashboard/getPiechartStats") ;
         setPieChartStats(data.data);
-       } catch (error) {
-         console.error("Error fetching pie chart data:", error);
-       }
+      } catch (error) {
+        console.error("Error fetching pie chart data:", error);
+      }
     }; 
+
+  useEffect(() => {
+    fetchAreaChart();
+    fetchtableStats();
     fetchPieChartStats();
     }, []);
 
@@ -149,133 +146,147 @@ const Dashboard = ({setActiveButton}) => {
     return <p className={`text-xs mt-1 font-medium ${color}`}>{sign}{value.toFixed(2)}% vs last {range}</p>;
   };
   if (!summaryCardStats) return <p className="text-center py-20 h-20">Loading...</p>
-  if (!lineChartStats) return <p className="text-center py-20">Loading...</p>
+  if (!areaChartStats) return <p className="text-center py-20">Loading...</p>
   if (!tableStats) return <p className="text-center py-20">Loading...</p>
   if (!pieChartStats) return <p className="text-center py-20">Loading...</p>
 
 
   return (
     <div className="md:px-12 pt-12 px-4 ">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <h1 className="text-2xl font-bold ">Dashboard</h1>
 
         {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
-            {/* Total Sales */}
-            <div className="relative border bg-slate-100 p-6 shadow rounded-xl">
-              {/* Sales Range Select */}
-              <div className="absolute top-4 right-4">
-                <Select
-                  value={rangeSalesStats}
-                  onChange={(val) => setRangeSalesStats(val)}
-                  size="small"
-                  style={{ width: 96 }}
-                >
-                  {rangeOptions.map((r) => (
-                    <Option key={r.value} value={r.value}>
-                      <span className="!text-[10px] font-medium text-gray-500 hover:text-gray-900 ">{r.label}</span>
-                    </Option>
-                  ))}
-                </Select>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
+          {/* Total Sales */}
+          <div className="relative border bg-slate-100 p-6 shadow rounded-xl">
+            {/* Sales Range Select */}
+            <div className="absolute top-4 right-4">
+              <Select
+                value={rangeSalesStats}
+                onChange={(val) => setRangeSalesStats(val)}
+                size="small"
+                style={{ width: 96 }}
+              >
+                {rangeOptions.map((r) => (
+                  <Option key={r.value} value={r.value}>
+                    <span className="!text-[10px] font-medium text-gray-500 hover:text-gray-900 ">{r.label}</span>
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          <div className="flex flex-col xs:flex-row md:flex-col lg:flex-row mt-8">
+              <div className="flex  text-left  flex-col w-full">
+                <h3 className="text-gray-500">Total Sales</h3>
+                <p className="text-2xl font-bold">
+                  ${""}
+                  <CountUp end={summaryCardStats?.totalSales || 0} duration={1.5} separator="," decimals={2} />
+                </p>
+                {renderChange(summaryCardStats?.salesChange, rangeSalesStats)}
               </div>
-            <div className="flex flex-col xs:flex-row md:flex-col lg:flex-row mt-8">
-                <div className="flex  text-left  flex-col w-full">
-                  <h3 className="text-gray-500">Total Sales</h3>
-                  <p className="text-2xl font-bold">
-                    ${""}
-                    <CountUp end={summaryCardStats?.totalSales || 0} duration={1.5} separator="," decimals={2} />
-                  </p>
-                  {renderChange(summaryCardStats?.salesChange, rangeSalesStats)}
-                </div>
-                <div className="flexCenter items-center w-full  lg:mt-0 mt-4  ">
-                  <img src={salesIcon} className="w-12 h-12 mb-2" alt="Sales" />
-                </div>
+              <div className="flexCenter items-center w-full  lg:mt-0 mt-4  ">
+                <img src={salesIcon} className="w-12 h-12 mb-2" alt="Sales" />
               </div>
             </div>
-
-            {/* Total Orders */}
-            <div className="relative border bg-slate-100 p-6 shadow rounded-xl">
-              {/* Orders Range Select */}
-              <div className="absolute top-4 right-4">
-                <Select
-                  value={rangeOrderStats}
-                  onChange={(val) => setRangeOrderStats(val)}
-                  size="small"
-                  style={{ width: 96 }}
-                >
-                  {rangeOptions.map((r) => (
-                    <Option key={r.value} value={r.value}>
-                      <span className="!text-[10px] font-medium text-gray-500 hover:text-gray-900 hover:scale-105">{r.label}</span>
-                    </Option>
-                  ))}
-                </Select>
-              </div>
-
-            <div className="flex flex-col xs:flex-row md:flex-col lg:flex-row mt-8">
-                    <div className="flex  text-left  flex-col w-full">
-                        <h3 className="text-gray-500">Total Orders</h3>
-                        <p className="text-2xl font-bold">
-                          <CountUp end={summaryCardStats?.totalOrders || 0} duration={1.5} separator="," />
-                        </p>
-                        {renderChange(summaryCardStats?.ordersChange, rangeOrderStats)}
-                
-                  </div>
-                  <div className="flexCenter items-center w-full  lg:mt-0 mt-4  ">
-                      <img src={ordersIcon} className="w-12 h-12 mb-2" alt="Orders" />
-                    </div>
-                </div>
-            </div>
-            
-            {/* Total Customers */}
-            <div className="relative border bg-slate-100 p-6 shadow rounded-xl">
-              {/* Customers Range Select */}
-              <div className="absolute top-4 right-4">
-                <Select
-                  value={rangeCustomerStats}
-                  onChange={(val) => setRangeCustomerStats(val)}
-                  size="small"
-                  style={{ width: 96 }}
-                >
-                  {rangeOptions.map((r) => (
-                    <Option key={r.value} value={r.value}>
-                      <span className="!text-[10px] font-medium text-gray-500 hover:text-gray-900 hover:scale-105">{r.label}</span>
-                    </Option>
-                  ))}
-                </Select>
-              </div>
-            <div className="flex flex-col xs:flex-row md:flex-col lg:flex-row mt-8">
-                  <div className="flex  text-left  flex-col w-full">
-                        <h3 className="text-gray-500">Total Customers</h3>
-                        <p className="text-2xl font-bold">
-                          <CountUp end={summaryCardStats?.totalUsers || 0} duration={1.5} separator="," />
-                        </p>
-                        {renderChange(summaryCardStats?.usersChange, rangeCustomerStats)}
-                    </div>
-                  <div className="flexCenter items-center w-full lg:mt-0 mt-4 ">
-                    <img src={CustomerIcon} className="w-12 h-12 mb-2" alt="Customers" />
-                  </div>
-              </div>
-            </div>
-
-
           </div>
 
-        {/* Line Chart  */}
+          {/* Total Orders */}
+          <div className="relative border bg-slate-100 p-6 shadow rounded-xl">
+            {/* Orders Range Select */}
+            <div className="absolute top-4 right-4">
+              <Select
+                value={rangeOrderStats}
+                onChange={(val) => setRangeOrderStats(val)}
+                size="small"
+                style={{ width: 96 }}
+              >
+                {rangeOptions.map((r) => (
+                  <Option key={r.value} value={r.value}>
+                    <span className="!text-[10px] font-medium text-gray-500 hover:text-gray-900 hover:scale-105">{r.label}</span>
+                  </Option>
+                ))}
+              </Select>
+            </div>
+
+          <div className="flex flex-col xs:flex-row md:flex-col lg:flex-row mt-8">
+                  <div className="flex  text-left  flex-col w-full">
+                      <h3 className="text-gray-500">Total Orders</h3>
+                      <p className="text-2xl font-bold">
+                        <CountUp end={summaryCardStats?.totalOrders || 0} duration={1.5} separator="," />
+                      </p>
+                      {renderChange(summaryCardStats?.ordersChange, rangeOrderStats)}
+              
+                </div>
+                <div className="flexCenter items-center w-full  lg:mt-0 mt-4  ">
+                    <img src={ordersIcon} className="w-12 h-12 mb-2" alt="Orders" />
+                  </div>
+              </div>
+          </div>
+          
+          {/* Total Customers */}
+          <div className="relative border bg-slate-100 p-6 shadow rounded-xl">
+            {/* Customers Range Select */}
+            <div className="absolute top-4 right-4">
+              <Select
+                value={rangeCustomerStats}
+                onChange={(val) => setRangeCustomerStats(val)}
+                size="small"
+                style={{ width: 96 }}
+              >
+                {rangeOptions.map((r) => (
+                  <Option key={r.value} value={r.value}>
+                    <span className="!text-[10px] font-medium text-gray-500 hover:text-gray-900 hover:scale-105">{r.label}</span>
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          <div className="flex flex-col xs:flex-row md:flex-col lg:flex-row mt-8">
+                <div className="flex  text-left  flex-col w-full">
+                      <h3 className="text-gray-500">Total Customers</h3>
+                      <p className="text-2xl font-bold">
+                        <CountUp end={summaryCardStats?.totalUsers || 0} duration={1.5} separator="," />
+                      </p>
+                      {renderChange(summaryCardStats?.usersChange, rangeCustomerStats)}
+                  </div>
+                <div className="flexCenter items-center w-full lg:mt-0 mt-4 ">
+                  <img src={CustomerIcon} className="w-12 h-12 mb-2" alt="Customers" />
+                </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        {/* Area Chart  */}
         {/* Revenue of the last 12 months */}
-        <div className="bg-slate-100 p-6 border shadow flex-col flex rounded-xl my-4  overflow-auto">
-        <span className="mb-4 font-semibold">Revenue of the last 12 months</span>
-        <span className="text-sm text-gray-30 font-medium p-4">
-          Total: {lineChartStats.resultrevenueData?.reduce((sum, r) => sum + r.totalRevenue, 0)} $
-        </span>
-          <ResponsiveContainer width="100%" height={300} >
-            <LineChart data={lineChartStats.resultrevenueData}>
+        <div className="bg-slate-100 p-4 !pb-0 px-6  border shadow flex-col flex rounded-xl overflow-auto">
+          <span className=" font-medium font-sans flex items-center"><FaDollarSign/>Revenue of the last 12 months ( <span className="text-sm text-gray-30 font-sans font-semibold p-2">
+            Total: ${areaChartStats.resultrevenueData?.reduce((sum, r) => sum + r.totalRevenue, 0)} 
+          </span>)</span>
+          
+          
+          <ResponsiveContainer height={250} className="w-full my-4">
+            <AreaChart data={areaChartStats.resultrevenueData}>
+              <defs>
+                <linearGradient id="revenueColor" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
               <YAxis />
               <Tooltip />
-              <Line type="monotone" dataKey="totalRevenue" stroke="#3b82f6" strokeWidth={2} />
-            </LineChart>
+              <Area 
+                type="monotone" 
+                dataKey="totalRevenue" 
+                stroke="#3b82f6" 
+                fillOpacity={1} 
+                fill="url(#revenueColor)" 
+              />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
+
 
         {/* Pie Chats  */}
         <div className=" bg-indigo-100 p-4 border my-6 rounded-xl">
@@ -289,9 +300,10 @@ const Dashboard = ({setActiveButton}) => {
 
 
         {/* Tables */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-0 gap-y-4 lg:gap-x-4 xl:gap-y-0 ">
           {/* 1-Recent Orders */}
-          <div className="lg:col-span-2 col-span-1 border bg-primary p-6 shadow rounded-xl overflow-auto ">
+          <div className="lg:col-span-2 col-span-1 w-full border bg-primary p-6 shadow rounded-xl overflow-auto  ">
             <h3 className="flex gap-x-2 items-center mb-4 font-semibold">
               <img src={orderIcon} alt="recentOrdersIcon" className="w-7 h-7 items-center" />
               Recent Orders
@@ -503,7 +515,7 @@ const Dashboard = ({setActiveButton}) => {
                                           navigate(`/listProducts/${product._id}`);
                                           setActiveButton('/listProducts');
                                   }}                          
-                           >
+                            >
                           <ArrowRightOutlined className="text-xl p-1" />
                         </button>
                       </td>
@@ -513,6 +525,7 @@ const Dashboard = ({setActiveButton}) => {
               </table>
           </div>
           </div>
+        </div>
     
     </div>
   );
