@@ -164,11 +164,11 @@ useEffect(() => {
       render: (price) => <span className="text-red-500 font-medium">${price}</span> ,
     },
     {title: "Actions",
-      render: (_, record) => (
+      render: (_, product) => (
         <div className="flex gap-2">
           <Tooltip title="Edit">
             <Button  
-              onClick={openEditModal}
+              onClick={()=>openEditModal(product)}
               type="primary"
               className='px-2 py-1'
               >
@@ -177,7 +177,7 @@ useEffect(() => {
           </Tooltip>
           <Popconfirm
             title="Are you sure to delete this product?"
-            onConfirm={() => handleDelete(record._id)}
+            onConfirm={() => handleDelete(product._id)}
             okText="Yes"
             cancelText="No"
           >

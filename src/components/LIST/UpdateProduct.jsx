@@ -8,36 +8,36 @@ import axios from 'axios';
 const UpdateProduct = ({ setCurrentProduct,currentProduct ,setIsEditModalOpen,fetchProducts}) => {
   
     //Categories && subcategory && subsubcategory
-    const categories = {
-        Computer: {
-        subCategories: {
-            "Pc normal & pro": ["desktop pc", "portable pc", "Mac book pc"],
-            "Pc gamer": ["desktop gamer pc", "portable gamer pc"],
-            "Pc accessories": ["charger pc", "keyboard", "mouse", "headphones pc"],
-        },
-        },
-        "Phones & Tablets": {
-        subCategories: {
-            phone: [],
-            tablet: [],
-            "phones accessories": ["ecouter", "charger", "powerbank"],
-        },
-        },
-        "Household Appliances": {
-        subCategories: {
-            "washing machine": [],
-            refrigerator: [],
-            "air conditioner": [],
-            TV: [],
-        },
-        },
-        Cosmetics: {
-        subCategories: {
-            perfume: [],
-            care: [],
-        },
-        },
-    };
+  const categories = {
+    Computer: {
+      subCategories: {
+        "Pc Normal & Pro": ["Desktop Pc", "Portable Pc", "Mac Book Pc"],
+        "Pc Gamer": ["Desktop Gamer Pc", "Portable Gamer Pc"],
+        "Pc Accessories": ["Charger Pc", "keyboard", "Mouse", "Headphones Pc"],
+      },
+    },
+    "Phones & Tablets": {
+      subCategories: {
+        Phone: [],
+        Tablet: [],
+        "Phones Accessories": ["Ecouter", "Charger", "Powerbank"],
+      },
+    },
+    "Household Appliances": {
+      subCategories: {
+        "Washing Machine": [],
+        Refrigerator: [],
+        "Air Conditioner": [],
+        TV: [],
+      },
+    },
+    Cosmetics: {
+      subCategories: {
+        Perfume: [],
+        Care: [],
+      },
+    },
+  };
    const handleDeleteImage = async (i) => {
         const updatedImages = [...currentProduct.images];
         updatedImages.splice(i, 1); // Remove image at index i
@@ -701,10 +701,10 @@ const UpdateProduct = ({ setCurrentProduct,currentProduct ,setIsEditModalOpen,fe
 
         {/* Submit Button */}
         <button
-        type="submit"
-        className="w-full bg-blue-500 h-[41.6px] text-white py-2 rounded-lg transition duration-200 hover:bg-blue-400"
-        >
-        Save Changes
+            type="submit"
+            className="w-full bg-blue-500 h-[41.6px] text-white py-2 rounded-lg transition duration-200 hover:bg-blue-400"
+            >
+            Save Changes
         </button>
       </div>
      </div>

@@ -4,7 +4,7 @@ import { FaPlusCircle, FaTrash } from "react-icons/fa";
 
 const DetailsUpdate = ({ subCategory, subSubCategory, details, handleChange }) => {
   // Initialize descriptionSection with details.DescriptionSection
-  const [descriptionSection, setDescriptionSection] = useState(details.DescriptionSection || []);
+  const [descriptionSection, setDescriptionSection] = useState(details?.DescriptionSection || []);
   const [numberDesItem, setNumberDesItem] = useState(descriptionSection.length);
 
   const syncDescriptionSection = (updatedDescriptions) => {
@@ -1143,7 +1143,7 @@ const DetailsUpdate = ({ subCategory, subSubCategory, details, handleChange }) =
         <input
           type="number"
           name="waranty"
-          value={details.waranty || ""}
+          value={details?.waranty || ""}
           onChange={handleChange}
           placeholder="Enter Warranty"
           className="w-full p-2 border  rounded-md focus:outline-blue-500" 
@@ -1155,7 +1155,7 @@ const DetailsUpdate = ({ subCategory, subSubCategory, details, handleChange }) =
         <select
           id="color"
           name="color"
-          value={details.color || ""}
+          value={details?.color || ""}
           onChange={handleChange}
           className="w-full p-2 border  rounded-md focus:outline-blue-500" 
         >
